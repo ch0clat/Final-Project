@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+//FINAL PROJECT ATP PHONE BOOK KELOMPOK 9
+
 #define n 1000
 
 typedef struct contacts {
@@ -11,6 +13,7 @@ typedef struct contacts {
 
 int contact_count = 0;
 contact newContact[n], temp, del;
+int del_count = 0;
 
 void buffer (int X) {
     scanf("\n%d", &X);
@@ -59,17 +62,21 @@ void list() {
     buffer (x);
 }
 
+
 void sort() {
+    int sort_counts = 0;
     printf("\n\n\n\t\t\tSORT\t");
-    for(int i = 0; i < contact_count - 1; i++){
-        for(int j = 0; j < contact_count - i - 1; j++){
+    for(int i = 0 + del_count; i < contact_count - 1; i++){
+        for(int j = 0 + del_count; j < contact_count - i - 1; j++){
             if(strcmp(newContact[j].nama, newContact[j + 1].nama) > 0){
                 temp = newContact[j];
                 newContact[j] = newContact[j + 1];
                 newContact[j + 1] = temp;
+                sort_counts++;
             }
         }
     }
+    printf("\nSorting telah di lakukan dengan %d steps", sort_counts);
     printf("\n%-20s %s\n", "Nama", "No Handphone");
     for (int i = 0; i < contact_count; i++) {
         if (newContact[i].nomor > 0) printf("%-20s %lld\n", newContact[i].nama, newContact[i].nomor);
@@ -169,7 +176,7 @@ void delete_contact() {
                 {
                     newContact[j] = newContact[j + 1];
                 }
-                
+                del_count++;
                 
                 printf("\nContact %s telah di hapus", f_name);
 
