@@ -437,39 +437,51 @@ void edit_contact()
     }
 }
 
+void fa () {
+
+}
+
 void menu()
 {
     int X;
-
+    //menampilkan menu dan pilihan function yang dapat dilakukan
     printf("\n\n\n\t\t\tMENU\t\t\t\n");
     printf("1. Tambah contact Baru\t\t2. List contact\t\t3. Sort contact\n");
     printf("4. Cari contact\t\t\t5. Hapus\t\t\t6. Edit\t\t\t\n7. Exit\n");
-
+    //mengambil input x sebagai pilihan
     scanf("%d", &X);
-
+    //menggunakan switch untuk memilih case yang sesuai int x
     switch (X)
     {
+    // case untuk menambahkan contact baru
     case 1:
         add_contact();
         break;
+    // case untuk menampilkan contact yang telah di input
     case 2:
         list();
         break;
+    //case untuk mengurutkan contact yang telah di input
     case 3:
         sort();
         break;
+    //case untuk mencari contact yang telah di input
     case 4:
         search();
         break;
+    //case untuk menghapus contact yang telah di input
     case 5:
         delete_contact();
         break;
+    //case untuk merubah contact yang telah di input
     case 6:
         edit_contact();
         break;
+    //case untuk menghentikan program
     case 7:
         return;
         break;
+    //case untuk handle input yang tidak sesuai
     default:
         printf("Masukkan angka yang benar!\n");
         menu();
@@ -478,6 +490,8 @@ void menu()
 
 int main()
 {
+    system("color a");
+    //Memanggil function menu
     menu();
     return 0;
 }
