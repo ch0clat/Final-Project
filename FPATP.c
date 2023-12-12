@@ -4,24 +4,29 @@
 
 // FINAL PROJECT ATP PHONE BOOK KELOMPOK 9
 
-#define n 1000
-
+// struct contacts untuk menyimpan input nama, nomor, dan int favorite
 typedef struct contacts
 {
     char nama[50];
     long long int nomor;
-    int fav;
+    // int favorite digunakan untuk menuntukan apakah contact tersebut termasuk contact favorite atau bukan
+    int favorite;
 } contact;
 
+//int contact_count digunakan untuk menghitung berapa contact yang telah di input
 int contact_count = 0;
-contact newContact[n], temp, del;
+// line ini digunakan untuk declare structs
+contact newContact[1000], temp, del;
+//int del_count digunakan untuk menghitung berapa contact yang telah terhapus
 int del_count = 0;
 
+//void buffer digunakan untuk menjadi buffer antara function sebelum menuju kembali ke menu
 void buffer(int X)
 {
     scanf("\n%d", &X);
     if (X == 1)
     {
+        system("cls");
         menu();
     }
     else
@@ -31,41 +36,32 @@ void buffer(int X)
     }
 }
 
+// void add_contact digunakan untuk menambahkan contact baru
 void add_contact()
 {
     printf("\n\n\n\t\t\tNEW CONTACT\t\t\t\n");
     printf("Nama : ");
     getchar();
-    fgets(newContact[contact_count].nama, sizeof(newContact[contact_count].nama), stdin);
-    newContact[contact_count].nama[strcspn(newContact[contact_count].nama, "\n")] = '\0';
-    strupr(newContact[contact_count].nama);
-    printf("\nNo Handphone: ");
-    scanf("\n%lld", &newContact[contact_count].nomor);
+    fgets(newContact[contact_count - del_count].nama, sizeof(newContact[contact_count - del_count].nama), stdin);
+    newContact[contact_count - del_count].nama[strcspn(newContact[contact_count - del_count].nama, "\n")] = '\0';
+    strupr(newContact[contact_count - del_count].nama);
+    printf("\nNo Handphone : ");
+    scanf("%lld", &newContact[contact_count - del_count].nomor);
     contact_count++;
 
     printf("\n\t\tTekan 1 untuk lanjut\n");
     int x = 0;
-    while (x != 1)
-    {
-        scanf("\n%d", &x);
-        if (x == 1)
-        {
-            menu();
-        }
-        else
-        {
-            printf("Coba tekan 1 dulu pls <3\n");
-        }
-    }
+    buffer(x);
 }
 
+// void list digunakan untuk output contact yang telah di input
 void list()
 {
     printf("\n\n\n\t\t\tLIST\t\t\t\n");
     printf("\n%-20s %s\n", "Nama", "No Handphone");
     for (int j = 0; j < contact_count; j++)
     {
-        if (newContact[j].fav == 1)
+        if (newContact[j].favorite == 1)
         {
             printf("*");
         }
@@ -79,6 +75,8 @@ void list()
     buffer(x);
 }
 
+
+//void bubble digunakan untuk sorting contact secara alphabetical A - Z dengan bubble sort
 void bubble () {
     int sort_counts = 0;
     printf("\n\n\n\t\t\tSORT\t");
@@ -108,12 +106,7 @@ void bubble () {
     buffer(x);
 }
 
-void swap(int *a, int *b) {
-  int temp = *a;
-  *a = *b;
-  *b = temp;
-}
-
+//void select digunakan untuk sorting contact secara alphabetical Z - A dengan select sort
 void select () {
     int sort_counts = 0;
     for (int i = 0; i < contact_count - 1 - del_count; i++) {
@@ -123,7 +116,9 @@ void select () {
         min_idx = j;
         sort_counts++;
     }
-    swap(&newContact[min_idx], &newContact[i]);
+    temp = newContact[min_idx];
+    newContact[min_idx] = newContact[i];
+    newContact[i] = temp;
   }
 
   printf("\nSorting telah di lakukan dengan %d steps", sort_counts);
@@ -139,6 +134,7 @@ void select () {
     buffer(x);
 }
 
+//void sort digunakan untuk memilih jenis sorting yang ingin di lakukan
 void sort()
 {
     int x = 0;
@@ -164,9 +160,9 @@ void sort()
     }
 }
 
+// Void search digunakan untuk mencari contact yang telah di input
 void search()
 {
-    // Implement search functionality
     int x;
     char f_name[50];
     printf("\n\n\n\t\t\tSEARCH\t\t\t\n");
@@ -254,6 +250,7 @@ void search()
     }
 }
 
+// void delete_contact digunkan untuk menghapus contact yang telah di input
 void delete_contact()
 {
     int x;
@@ -348,6 +345,7 @@ void delete_contact()
     }
 }
 
+// void edit_contact digunkan untuk merubah contact yang telah di input
 void edit_contact()
 {
     int x;
@@ -443,16 +441,19 @@ void edit_contact()
     }
 }
 
-void favorite () {
+// Void favorite digunakan untuk menambahkan contact ke dalam list contact favorite
+void favorite()
+{
     int x;
     char f_name[50];
+    printf("\n\n\n\t\t\tTAMBAH FAVORITE\t\t\t\n");
     printf("1. Cari Nama\n");
     printf("2. Cari Nomor Handphone\n");
-    printf("Tekan 1 / 2 untuk memilih ->");
+    printf("Tekan 1 / 2 untuk memilih -> ");
     scanf("%d", &x);
     if (x == 1)
     {
-        printf("Nama yang ingin di ubah : ");
+        printf("Nama yang ingin di jadikan favorit : ");
         getchar();
         fgets(f_name, sizeof(f_name), stdin);
         f_name[strcspn(f_name, "\n")] = '\0';
@@ -461,82 +462,105 @@ void favorite () {
         {
             if (strcmp(newContact[j].nama, f_name) == 0)
             {
-                newContact[j].fav = 1;
-                printf("\n\t\tContact telah di jadikan favorite\n");
+                newContact[j].favorite = 1;
+                printf("\n\t\tContact telah di jadikan favorit\n");
 
                 printf("\n\t\tTekan 1 untuk lanjut\n");
                 int x = 0;
                 buffer(x);
                 break;
-            }
+            } 
         }
-        int x = 0;
-        printf("Contact tidak ditemukan!\n");
-        printf("Tekan 1.Menu\t\t2.Coba lagi");
-        while (x != 1 || x != 2)
-        {
-            scanf("%d", &x);
-            if (x == 1)
-            {
-                menu();
+                int x = 0;
+                printf("Contact tidak ditemukan!\n");
+                printf("Tekan 1.Menu\t\t2.Coba lagi");
+                while (x != 1 || x != 2)
+                    {
+                        scanf("%d", &x);
+                        if (x == 1)
+                        {
+                            menu();
+                        }
+                        else if (x == 2)
+                        {
+                            search();
+                        }
+                        else
+                        {
+                            printf("\nMasukkan angka yang benar!\n");
+                        }
+                    
             }
-            else if (x == 2)
-            {
-                search();
-            }
-            else
-            {
-                printf("\nMasukkan angka yang benar!\n");
-            }
-        }
     }
     else if (x == 2)
     {
         long long int f_number;
-        printf("Nomor yang ingin di ubah : ");
+        printf("Nomor yang ingin di jadikan favorit : ");
         scanf("%lld", &f_number);
         for (int j = 0; j < contact_count; j++)
         {
             if (newContact[j].nomor == f_number)
             {
-                newContact[j].fav = 1;
-                printf("\n\t\tContact telah di jadikan favorite\n");
+                newContact[j].favorite = 1;
+                printf("\n\t\tContact telah di jadikan favorit\n");
 
                 printf("\n\t\tTekan 1 untuk lanjut\n");
                 int x = 0;
                 buffer(x);
                 break;
-            }
+            } 
         }
-        int x = 0;
-        printf("Contact tidak ditemukan!\n");
-        printf("Tekan 1.Menu\t\t2.Coba lagi");
-        while (x != 1 || x != 2)
+                int x = 0;
+                printf("Contact tidak ditemukan!\n");
+                printf("Tekan 1.Menu\t\t2.Coba lagi");
+                while (x != 1 || x != 2)
+                    {
+                        scanf("%d", &x);
+                        if (x == 1)
+                        {
+                            menu();
+                        }
+                        else if (x == 2)
+                        {
+                            search();
+                        }
+                        else
+                        {
+                            printf("\nMasukkan angka yang benar!\n");
+                        }
+                    }
+    }
+    else {
+        printf("\nInput tidak valid!\n");
+        favorite();
+    }
+}
+
+void list_favorite()
+{
+    printf("\n\n\n\t\t\tLIST KONTAK FAVORIT\t\t\t\n");
+    printf("\n%-20s %s\n", "Nama", "No Handphone");
+    
+    for (int j = 0; j < contact_count; j++)
+    {
+        if (newContact[j].favorite == 1 && newContact[j].nomor > 0)
         {
-            scanf("%d", &x);
-            if (x == 1)
-            {
-                menu();
-            }
-            else if (x == 2)
-            {
-                search();
-            }
-            else
-            {
-                printf("\nMasukkan angka yang benar!\n");
-            }
+            printf("%-20s %lld\n", newContact[j].nama, newContact[j].nomor);
         }
     }
+
+    printf("\n\t\tTekan 1 untuk lanjut\n");
+    int x = 0;
+    buffer(x);
 }
 
 void menu()
 {
     int X;
     //menampilkan menu dan pilihan function yang dapat dilakukan
-    printf("\n\n\n\t\t\tMENU\t\t\t\n");
-    printf("1. Tambah contact Baru\t\t2. List contact\t\t3. Sort contact\n");
-    printf("4. Cari contact\t\t\t5. Hapus\t\t\t6. Edit\t\t\t\n7. Exit\n");
+    printf("\n\t\t\t\t\t\tMENU\t\t\t\t\n");
+    printf("1. Tambah contact Baru\t\t2. List contact\t\t3. Sort contact\t\t\t4. Cari contact\n");
+    printf("5. Hapus\t\t\t6. Edit\t\t\t7. Tambah Contact Favorite\t8. List Contact Favorite\n");
     //mengambil input x sebagai pilihan
     scanf("%d", &X);
     //menggunakan switch untuk memilih case yang sesuai int x
@@ -566,9 +590,13 @@ void menu()
     case 6:
         edit_contact();
         break;
-    //case untuk menghentikan program
+    //case untuk menambah contact favorite
     case 7:
         favorite();
+        break;
+    //case untuk print contact favorite
+    case 8:
+        list_favorite();
         break;
     //case untuk handle input yang tidak sesuai
     default:
